@@ -1,0 +1,33 @@
+GREEN = block.GREEN_WOOL
+RED = block.RED_WOOL
+redPos = mc.player.getTilePos()
+greenPos = mc.player.getTilePos()
+done = False
+
+pos = mc.player.getTilePos()
+
+mc.setBlock(redPos.x+1, redPos.y, redPos.z, RED)
+mc.setBlock(greenPos.x-1, greenPos.y, greenPos.z, GREEN)
+
+def clearReplay():
+    mc.setBlock(redPos.x + 1, redPos.y, redPos.z, block.AIR)
+    mc.setBlock(greenPos.x - 1, greenPos.y, greenPos.z, block.AIR)
+
+def checkReplayHit():
+    global done
+    events = mc.events.pollBlockHits()
+    for e in events:
+        pos = e.pos
+        if pos.x == redPos.x+1 and pos.y == redPos.y and pos.z == redPos.z:
+            clearReplay()
+            mc.postToChat("Close game")
+            done = True
+        elif pos.x == greenPos.x-1 and pos.y == greenPos.y and pos.z == greenPos.z:
+            mc.postToChat("Play again")
+            clearReplay()
+
+while not done:
+    checkReplayHit()
+
+else:
+    mc.postToChat("thanks for playing")
